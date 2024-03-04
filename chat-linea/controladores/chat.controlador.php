@@ -11,7 +11,27 @@ class ChatControlador
     public function Consultar()
     {
         $this->modelo = new Chat();
-        echo json_encode($this->modelo->ConsultarChats());
+        $chats = $this->modelo->ConsultarChats();
+
+        // Codificar los datos en formato JSON
+        $json_data = json_encode($chats);
+
+        // Escribir los datos codificados en un archivo
+        $archivo = 'chats.json';
+        file_put_contents($archivo, $json_data);
+
+        // Leer el archivo JSON y decodificar los datos en PHP
+        $json_data = file_get_contents($archivo);
+        $chats = json_decode($json_data);
+
+        // Mostrar los mensajes
+        if ($chats) {
+            foreach ($chats as $fila) {
+                echo $fila->CONTENT . "<br>" . $fila->FECHA . "<br>";
+            }
+        } else {
+            echo "No se encontraron mensajes";
+        }
     }
 
 
